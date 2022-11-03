@@ -1,0 +1,156 @@
+/**
+Treblecross
+ANGIE LAM
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+
+bool checkWin(int, const char *, int);
+void displayBoard(char *, int);
+int userInput(char *, int, bool);
+
+
+int main(int argc, char *argv[]) {
+
+    // Prompt size of array
+    int size;
+    int position;
+    printf("Enter number of squares that you want: ");
+    int x =  scanf("%d", &size);
+     if (x < 0) {
+         perror("Something went wrong.");
+     }
+
+    // If size is negative, quit the program immediately
+    if (size < 0) {
+        exit(0);
+    }
+
+    // Create a 1-D array of sized char
+    char board[size];
+
+
+    // clearing the 1D Array
+    for (int i = 0; i < size; i++) {
+        board[i] = '_';
+    }
+
+    printf("\n");
+
+    // Print the current board.
+    displayBoard(board, size);
+
+    bool player;
+
+    while (true) {
+
+        player = true;
+        position = userInput(board, size, player);
+
+        displayBoard(board, size);
+
+        if (checkWin(position, board, size)) {
+            printf("Player 1 Wins");
+            break;
+        }
+
+        player = false;
+        position = userInput(board, size, player);
+
+        displayBoard(board, size);
+
+        if (checkWin(position, board, size)) {
+            printf("Player 2 Wins");
+            break;
+        }
+
+    }
+}
+
+
+// initialization of function
+
+bool checkWin(int position, const char *board, int size) {
+    // can go backwards
+    if (position - 1 >= 0) {
+        if (board[position - 1] == 'X') {
+            if (position - 2 >= 0) {
+                if (board[position - 2] == 'X') {
+                    return true;
+                } else {
+                    if (board[position + 1] == 'X' && position + 1 < size) {
+                        return true;
+                    }
+                }
+            } else {
+                if (position + 1 < size) {
+                    if (board[position + 1] == 'X') {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            if (position + 1 < size) {
+                if (board[position + 1] == 'X') {
+                    if (position + 2 < size) {
+                        if (board[position + 2] == 'X') {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        if ((board[position] == 'X' && board[position + 1] == 'X' && board[position + 2] == 'X') && size >= 3) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void displayBoard(char *board, int size) {
+    printf("\n");
+    for (int i = 0; i < size; i++) {
+        printf("%c ", board[i]);
+    }
+
+    printf("\n\n\n");
+}
+
+
+int userInput(char *board, int size, bool player) {
+    int position;
+    int y;
+    while (true) {
+        // Prompt player to choose an open position
+        if (player) {
+            printf("Player 1, please enter the position that you choose: ");
+        } else {
+            printf("Player 2, please enter the position that you choose: ");
+        }
+
+        // Ask for input
+        y = scanf("%d", &position);
+        if (y < 0) {
+            perror("Something went wrong.");
+        }
+
+        if (position > size - 1) {
+            printf("Incorrect position entered by Player\n");
+        } else {
+            if (board[position] == 'X') {
+                printf("Position occupied\n");
+            } else {
+                board[position] = 'X';
+                break;
+            }
+        }
+    }
+
+    return position;
+
+}
