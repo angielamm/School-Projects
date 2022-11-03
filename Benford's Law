@@ -1,0 +1,121 @@
+// Use this file to implement the program that reads
+// Census data and compares the distribution of population
+// digits to Benford's Law
+
+/**
+ * Validating Benford's Law for Census data
+ * ANGIE LAM
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Checks for Benford's Law
+float benLaw(float lines, float num) {
+  float y = num/lines;
+  return y;
+}
+
+int main(int argc, char *argv[]) {
+  
+    float lineCount = 0;
+  // Variables to record first digit count
+    int countOne = 0;
+    int countTwo = 0;
+    int countThree = 0;
+    int countFour = 0;
+    int countFive = 0;
+    int countSix = 0;
+    int countSeven = 0;
+    int countEight= 0;
+    int countNine = 0;
+  
+  // Opens the file
+  FILE *f = fopen("co-est2021-alldata.csv", "r");
+
+  // Checks the return code
+  if (f == NULL) {
+    perror("fopen");
+    exit(1);
+  }
+  
+  // Declares character buffer
+  char buf[1024];
+
+  int firstLine = 1;
+  
+  // Loops over the remaining lines that have data
+  while (fgets(buf, sizeof(buf), f) != NULL) {
+
+    // Skips the first line that contains the field names
+    if (firstLine) {
+      firstLine = 0;
+      continue;
+    }
+
+    // Counts num of lines
+    lineCount++;
+
+    // Uses strtok to get the first value
+    char *token;
+    token = strtok(buf, ",");
+    
+    // Gets 10th value
+    int count = 0;
+    
+    while (token != NULL && count < 8) {
+      token = strtok(NULL, ",");
+      count++;
+      
+     if (count == 8){
+       token = strtok(NULL,",");
+       
+     }else {
+       continue;
+       
+     }
+    }
+    
+    // Gets the first digit
+    char firstDigit = *token;
+
+    // Maps first digit to int
+    int value = firstDigit - '0';
+
+    // Records how many time each digit appears
+      if (value == 1) {
+        countOne++;
+        } else if (value == 2) {
+        countTwo++;
+        } else if ( value == 3) {
+        countThree++;
+        } else if ( value == 4) {
+        countFour++;
+        } else if ( value == 5) {
+        countFive++;
+        } else if ( value == 6) {
+        countSix++;
+        } else if (value == 7) {
+        countSeven++;
+        } else if ( value == 8) {
+        countEight++;
+        } else {
+        countNine++;
+        }
+    
+    }
+
+  // Output
+  printf("Fraction of leading 0's: %.4f\n", 0.000000);
+  printf("Fraction of leading 1's: %.4f\n", benLaw(lineCount,countOne));
+  printf("Fraction of leading 2's: %.4f\n", benLaw(lineCount,countTwo));
+  printf("Fraction of leading 3's: %.4f\n", benLaw(lineCount,countThree));
+  printf("Fraction of leading 4's: %.4f\n", benLaw(lineCount,countFour));
+  printf("Fraction of leading 5's: %.4f\n", benLaw(lineCount,countFive));
+  printf("Fraction of leading 6's: %.4f\n", benLaw(lineCount,countSix));
+  printf("Fraction of leading 7's: %.4f\n", benLaw(lineCount,countSeven));
+  printf("Fraction of leading 8's: %.4f\n", benLaw(lineCount,countEight));
+  printf("Fraction of leading 9's: %.4f\n", benLaw(lineCount,countNine));
+  
+  }
