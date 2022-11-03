@@ -1,0 +1,72 @@
+/**
+ * Generating random data
+ANGIE LAM
+ */
+
+// Use this file to implement the program that generates
+// random data with first digits obeying Benford's Law
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+
+int benfordDigit () {
+  double r = ((double) rand()) / RAND_MAX;
+  if (r > .3010) { 
+  return 1;
+} else if (r > .176) { 
+  return 2;
+} else if (r > .125){
+    return 3;
+}else if(r > .0970){
+    return 4;
+}else if (r > .0790) {
+    return 5;
+}else if (r > .0670) {
+    return 6;
+}else if ( r > .0580){
+    return 7;
+}else if ( r > .0510) {
+    return 8;
+}else if ( r > .0460){
+    return 9;
+}
+  }
+
+int uniformDigit(){
+  double r = ((double) rand()) / RAND_MAX;
+  return (int)(r*10);
+}
+
+int main(int argc, char *argv[]) {
+  
+  int numValues = 0;
+  int numDigits = 0;
+
+  // Process arguments with getopt
+  int c;
+  while ((c = getopt(argc, argv, "n:d:")) != -1) {
+    switch (c) {
+      case 'n':
+        numValues = atoi(optarg);
+        break;
+       case 'd':
+         numDigits = atoi(optarg);
+         break;
+    } 
+  }
+  
+  // Getting the number of values specified by user
+  for (int n = 0; n < numValues; n++) {
+  int result = benfordDigit();
+
+  //Generating the numbers by size specified by user
+  for (int d = 0; d < numDigits - 1; d++) {
+    result = result * 10 + uniformDigit();
+  }
+    printf("%d\n", result);
+    }
+
+  return 0;
+}
