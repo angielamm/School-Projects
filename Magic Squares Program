@@ -1,0 +1,76 @@
+/**
+Magic squares program
+ANGIE LAM
+ */
+
+#include <stdio.h>
+#include <stdlib.h> 
+
+int main(int argc, char *argv[]) {
+
+  // user input
+  int n;
+  printf("Enter a value of n: ");
+  int x = scanf("%d", &n);
+  if (x < 0) {
+        perror("Something went wrong.");
+    }
+
+  // if n is not odd, exit
+  if (n % 2 == 0) {
+    exit(0);
+  }
+
+  // Initialize magic square
+  int magicSquare[n][n];
+  
+  int row = 0;
+  int col = n / 2;
+  int rowMov = 0;
+  int colMov = 0;
+
+  //make everything in the array 0
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      magicSquare[i][j] = 0;
+    }
+  }
+
+  for (int i = 1; i <= n * n; i++) {
+    // assigning value to the square
+    magicSquare[row][col] = i;
+
+    // Calculate the position that would be found if we moved up
+    // and right, wrapping around if necessary
+    rowMov = row--; 
+    colMov = col++; 
+
+    // keeps rows value in check for going beyond the number of rows
+    if (row < 0) {
+      row = n - 1;
+    }
+
+    // keeps column value in check for going beyond the number of columns
+    if (col > n - 1) {
+      col = 0;
+    }
+
+    // if the block is not empty we need to move to other square
+    if (magicSquare[row][col] != 0) {
+        col = colMov;
+        row = rowMov + 1;
+      }
+  }
+
+    printf("\n");
+
+  // Print the complete square
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      printf("%d ", magicSquare[i][j]);
+    }
+    
+    printf("\n");
+    
+  }
+}
